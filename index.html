@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculateur de Débit Wi-Fi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        select, input {
+            margin-bottom: 20px;
+            padding: 5px;
+            width: 100%;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <h1>Calculateur de Débit Wi-Fi Théorique</h1>
+    <form id="wifi-form">
+        <label for="norme">Norme Wi-Fi :</label>
+        <select id="norme" required>
+            <option value="Wi-Fi 4">Wi-Fi 4</option>
+            <option value="Wi-Fi 5">Wi-Fi 5</option>
+            <option value="Wi-Fi 6">Wi-Fi 6</option>
+            <option value="Wi-Fi 6E">Wi-Fi 6E</option>
+            <option value="Wi-Fi 7">Wi-Fi 7</option>
+        </select>
+
+        <label for="mimo">Nombre d'antennes MIMO :</label>
+        <input type="number" id="mimo" min="1" max="16" required placeholder="Ex : 4">
+
+        <label for="largeur-bande">Largeur de bande (MHz) :</label>
+        <select id="largeur-bande" required>
+            <option value="20">20 MHz</option>
+            <option value="40">40 MHz</option>
+            <option value="80">80 MHz</option>
+            <option value="160">160 MHz</option>
+        </select>
+
+        <label for="frequence">Fréquence (GHz) :</label>
+        <select id="frequence" required>
+            <option value="2.4">2.4 GHz</option>
+            <option value="5">5 GHz</option>
+            <option value="6">6 GHz</option>
+        </select>
+
+        <button type="button" onclick="calculerDebit()">Calculer le débit théorique</button>
+    </form>
+
+    <div class="result" id="result"></div>
+
+    <script>
+        function calculerDebit() {
+            // Récupération des valeurs du formulaire
+            const normes = document.getElementById("norme").value;
+            const mimo = parseInt(document.getElementById("mimo").value);
+            const largeurBande = parseInt(document.getElementById("largeur-bande").value);
+            const frequence = parseFloat(document.getElementById("frequence").value);
+
+            // Débits par norme et largeur de bande par antenne MIMO
+            const debitParNorme = {
+                'Wi-Fi 4': {20: 72.2, 40: 150},
+                'Wi-Fi 5': {80: 433.3, 160: 866.7},
+                'Wi-Fi 6': {80: 600, 160: 1200},
+                'Wi-Fi 6E': {80: 600, 160: 1200},
+                'Wi-Fi 7': {80: 1200, 160: 2400}
+            };
+
+            // Limitations légales en France
+            const limitationsLargeurBande = {
+                "2.4": [20],
+                "5": [20, 40, 80],
+                "6": [20, 40, 80, 160]
+            };
+
+            // Vérification des limitations
+            if (!limitationsLargeurBande[frequence].includes(largeurBande)) {
+                document.getElementById("result").innerHTML = 
+                    `<span style='color:red;'>La largeur de bande ${largeurBande} MHz n'est pas autorisée pour la fréquence ${frequence} GHz en France.</span>`;
+                return;
+            }
+
+            // Calcul du débit par antenne
+            const debitParAntenne = debitParNorme[normes]?.[largeurBande];
+            
+            if (!debitParAntenne) {
+                document.getElementById("result").innerHTML =
+                    `<span style='color:red;'>Combinaison norme '${normes}' et largeur de bande '${largeurBande} MHz' non supportée.</span>`;
+                return;
+            }
+
+            // Calcul du débit total
+            const debitTotal = debitParAntenne * mimo;
+
+            // Affichage du résultat
+            document.getElementById("result").innerHTML =
+                `Débit théorique maximum : ${debitTotal.toFixed(2)} Mbps`;
+        }
+    </script>
+</body>
+</html>
