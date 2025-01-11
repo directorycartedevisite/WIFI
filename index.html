@@ -3,120 +3,203 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculateur de Débit Wi-Fi</title>
+    <title>Calculateur de Débit Wi-Fi Avancé</title>
     <style>
+        :root {
+            --primary-color: #4a90e2;
+            --secondary-color: #f5f5f5;
+            --text-color: #333;
+            --border-radius: 8px;
+        }
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: #f0f0f0;
+            margin: 0;
             padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
         }
         label {
             display: block;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
+            font-weight: bold;
         }
         select, input {
-            margin-bottom: 20px;
-            padding: 5px;
             width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+        }
+        .band-config {
+            background-color: var(--secondary-color);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+        }
+        .band-config h3 {
+            margin-top: 0;
+            color: var(--primary-color);
         }
         button {
-            padding: 10px 20px;
-            background-color: #007BFF;
+            background-color: var(--primary-color);
             color: white;
+            padding: 12px 20px;
             border: none;
+            border-radius: var(--border-radius);
             cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            transition: background-color 0.3s;
         }
         button:hover {
-            background-color: #0056b3;
+            background-color: #3a7bc8;
         }
-        .result {
-            margin-top: 20px;
-            font-size: 1.2em;
-            color: green;
+        #result {
+            margin-top: 30px;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            padding: 20px;
+            background-color: var(--secondary-color);
+            border-radius: var(--border-radius);
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
         }
     </style>
 </head>
 <body>
-    <h1>Calculateur de Débit Wi-Fi Théorique</h1>
-    <form id="wifi-form">
-        <label for="norme">Norme Wi-Fi :</label>
-        <select id="norme" required>
-            <option value="Wi-Fi 4">Wi-Fi 4</option>
-            <option value="Wi-Fi 5">Wi-Fi 5</option>
-            <option value="Wi-Fi 6">Wi-Fi 6</option>
-            <option value="Wi-Fi 6E">Wi-Fi 6E</option>
-            <option value="Wi-Fi 7">Wi-Fi 7</option>
-        </select>
+    <div class="container">
+        <h1>Calculateur de Débit Wi-Fi Théorique Avancé</h1>
+        <form id="wifi-form">
+            <div class="form-group">
+                <label for="norme">Norme Wi-Fi :</label>
+                <select id="norme" required>
+                    <option value="Wi-Fi 4">Wi-Fi 4 (802.11n)</option>
+                    <option value="Wi-Fi 5">Wi-Fi 5 (802.11ac)</option>
+                    <option value="Wi-Fi 6">Wi-Fi 6 (802.11ax)</option>
+                    <option value="Wi-Fi 6E">Wi-Fi 6E</option>
+                    <option value="Wi-Fi 7">Wi-Fi 7 (802.11be)</option>
+                </select>
+            </div>
 
-        <label for="mimo">Nombre d'antennes MIMO :</label>
-        <input type="number" id="mimo" min="1" max="16" required placeholder="Ex : 4">
+            <div class="band-config">
+                <h3>Configuration 2.4 GHz</h3>
+                <div class="form-group">
+                    <label for="mimo-2.4">Nombre d'antennes MIMO :</label>
+                    <input type="number" id="mimo-2.4" min="1" max="16" value="2" required>
+                </div>
+                <div class="form-group">
+                    <label for="largeur-bande-2.4">Largeur de bande (MHz) :</label>
+                    <select id="largeur-bande-2.4" required>
+                        <option value="20">20 MHz</option>
+                        <option value="40">40 MHz</option>
+                    </select>
+                </div>
+            </div>
 
-        <label for="largeur-bande">Largeur de bande (MHz) :</label>
-        <select id="largeur-bande" required>
-            <option value="20">20 MHz</option>
-            <option value="40">40 MHz</option>
-            <option value="80">80 MHz</option>
-            <option value="160">160 MHz</option>
-        </select>
+            <div class="band-config">
+                <h3>Configuration 5 GHz</h3>
+                <div class="form-group">
+                    <label for="mimo-5">Nombre d'antennes MIMO :</label>
+                    <input type="number" id="mimo-5" min="1" max="16" value="4" required>
+                </div>
+                <div class="form-group">
+                    <label for="largeur-bande-5">Largeur de bande (MHz) :</label>
+                    <select id="largeur-bande-5" required>
+                        <option value="20">20 MHz</option>
+                        <option value="40">40 MHz</option>
+                        <option value="80">80 MHz</option>
+                        <option value="160">160 MHz</option>
+                    </select>
+                </div>
+            </div>
 
-        <label for="frequence">Fréquence (GHz) :</label>
-        <select id="frequence" required>
-            <option value="2.4">2.4 GHz</option>
-            <option value="5">5 GHz</option>
-            <option value="6">6 GHz</option>
-        </select>
+            <div class="band-config">
+                <h3>Configuration 6 GHz</h3>
+                <div class="form-group">
+                    <label for="mimo-6">Nombre d'antennes MIMO :</label>
+                    <input type="number" id="mimo-6" min="1" max="16" value="8" required>
+                </div>
+                <div class="form-group">
+                    <label for="largeur-bande-6">Largeur de bande (MHz) :</label>
+                    <select id="largeur-bande-6" required>
+                        <option value="20">20 MHz</option>
+                        <option value="40">40 MHz</option>
+                        <option value="80">80 MHz</option>
+                        <option value="160">160 MHz</option>
+                    </select>
+                </div>
+            </div>
 
-        <button type="button" onclick="calculerDebit()">Calculer le débit théorique</button>
-    </form>
+            <button type="button" onclick="calculerDebit()">Calculer le débit théorique</button>
+        </form>
 
-    <div class="result" id="result"></div>
+        <div id="result"></div>
+    </div>
 
     <script>
         function calculerDebit() {
-            // Récupération des valeurs du formulaire
-            const normes = document.getElementById("norme").value;
-            const mimo = parseInt(document.getElementById("mimo").value);
-            const largeurBande = parseInt(document.getElementById("largeur-bande").value);
-            const frequence = parseFloat(document.getElementById("frequence").value);
+            const norme = document.getElementById("norme").value;
+            const configurations = {
+                "2.4": {
+                    mimo: parseInt(document.getElementById("mimo-2.4").value),
+                    largeurBande: parseInt(document.getElementById("largeur-bande-2.4").value)
+                },
+                "5": {
+                    mimo: parseInt(document.getElementById("mimo-5").value),
+                    largeurBande: parseInt(document.getElementById("largeur-bande-5").value)
+                },
+                "6": {
+                    mimo: parseInt(document.getElementById("mimo-6").value),
+                    largeurBande: parseInt(document.getElementById("largeur-bande-6").value)
+                }
+            };
 
-            // Débits par norme et largeur de bande par antenne MIMO
             const debitParNorme = {
                 'Wi-Fi 4': {20: 72.2, 40: 150},
-                'Wi-Fi 5': {80: 433.3, 160: 866.7},
-                'Wi-Fi 6': {80: 600, 160: 1200},
-                'Wi-Fi 6E': {80: 600, 160: 1200},
-                'Wi-Fi 7': {80: 1200, 160: 2400}
+                'Wi-Fi 5': {20: 86.7, 40: 200, 80: 433.3, 160: 866.7},
+                'Wi-Fi 6': {20: 143.4, 40: 286.8, 80: 600, 160: 1201},
+                'Wi-Fi 6E': {20: 143.4, 40: 286.8, 80: 600, 160: 1201},
+                'Wi-Fi 7': {20: 286.8, 40: 573.6, 80: 1200, 160: 2400}
             };
 
-            // Limitations légales en France
-            const limitationsLargeurBande = {
-                "2.4": [20],
-                "5": [20, 40, 80],
-                "6": [20, 40, 80, 160]
-            };
+            let debitTotal = 0;
+            let detailsDebit = [];
 
-            // Vérification des limitations
-            if (!limitationsLargeurBande[frequence].includes(largeurBande)) {
-                document.getElementById("result").innerHTML = 
-                    `<span style='color:red;'>La largeur de bande ${largeurBande} MHz n'est pas autorisée pour la fréquence ${frequence} GHz en France.</span>`;
-                return;
+            for (const [bande, config] of Object.entries(configurations)) {
+                if (debitParNorme[norme][config.largeurBande]) {
+                    const debitBande = debitParNorme[norme][config.largeurBande] * config.mimo;
+                    debitTotal += debitBande;
+                    detailsDebit.push(`${bande} GHz: ${debitBande.toFixed(2)} Mbps`);
+                }
             }
 
-            // Calcul du débit par antenne
-            const debitParAntenne = debitParNorme[normes]?.[largeurBande];
-            
-            if (!debitParAntenne) {
-                document.getElementById("result").innerHTML =
-                    `<span style='color:red;'>Combinaison norme '${normes}' et largeur de bande '${largeurBande} MHz' non supportée.</span>`;
-                return;
-            }
-
-            // Calcul du débit total
-            const debitTotal = debitParAntenne * mimo;
-
-            // Affichage du résultat
-            document.getElementById("result").innerHTML =
-                `Débit théorique maximum : ${debitTotal.toFixed(2)} Mbps`;
+            const resultElement = document.getElementById("result");
+            resultElement.innerHTML = `
+                <p>Débit théorique total maximum : <strong>${debitTotal.toFixed(2)} Mbps</strong></p>
+                <p>Détails par bande :</p>
+                <ul>${detailsDebit.map(detail => `<li>${detail}</li>`).join('')}</ul>
+            `;
         }
     </script>
 </body>
